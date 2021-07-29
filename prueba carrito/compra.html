@@ -70,42 +70,45 @@
                                 <input type="text" class="form-control" id="telefono" placeholder="Número Teléfonico" name="telefono">
                             </div>
                         </div>
+                        
+
                         <div class="form-group row">
-                            <label for="email" class="col-12 col-md-2 col-form-label h2"><span class="input-group-addon"><i class="fas fa-street-view"></i></span></label>
+                            <label for="postalCode" class="col-12 col-md-2 col-form-label h2"><span class="input-group-addon"><i class="fas fa-street-view"></i></span></label>
                             <div class="col-12 col-md-10">
-                                <input type="text" class="form-control" id="telefono" placeholder="Codigo Postal" name="telefono">
+                                <input type="number" class="form-control" name="codigo-postal" id="postalCode" placeholder="codigo postal" onchange="myFunction(document.querySelector('#postalCode').value)">
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="email" class="col-12 col-md-2 col-form-label h2"><span class="input-group-addon"><i class="fas fa-street-view"></i></span></label>
-                            <div class="col-12 col-md-10">
-                                <input type="text" class="form-control" id="codigo" placeholder="Colonia" name="destinatario">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="email" class="col-12 col-md-2 col-form-label h2"><span class="input-group-addon"><i class="fas fa-street-view"></i></span></label>
-                            <div class="col-12 col-md-10">
-                                <input type="text" class="form-control" id="codigo" placeholder="Estado/Región" name="codigo">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="email" class="col-12 col-md-2 col-form-label h2"><span class="input-group-addon"><i class="fas fa-street-view"></i></span></label>
-                            <div class="col-12 col-md-10">
-                                <input type="text" class="form-control" id="codigo" placeholder="Ciudad" name="codigo">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="email" class="col-12 col-md-2 col-form-label h2"><span class="input-group-addon"><i class="fas fa-street-view"></i></span></label>
-                            <div class="col-12 col-md-10">
-                                <input type="text" class="form-control" id="codigo" placeholder="Delegación o municipio" name="codigo">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="email" class="col-12 col-md-2 col-form-label h2"><span class="input-group-addon"><i class="fas fa-street-view"></i></span></label>
-                            <div class="col-12 col-md-10">
-                                <input type="text" class="form-control" id="codigo" placeholder="Calle" name="codigo">
-                            </div>
-                        </div>
+
+                                <div class="form-group row">
+                                    <label for="estado"  class="col-12 col-md-2 col-form-label h2"><span class="input-group-addon"><i class="fas fa-street-view"></i></span></label>
+                                    <div class="col-12 col-md-10">
+                                        <input type="text" class="form-control" name="estado" id="estado" placeholder="estado" readonly="readonly">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="ciudad" class="col-12 col-md-2 col-form-label h2"><span class="input-group-addon"><i class="fas fa-street-view"></i></span></label>
+                                    <div class="col-12 col-md-10">
+                                        <input type="text" class="form-control" name="ciudad" id="ciudad" placeholder="ciudad" readonly="readonly">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="pueblo" class="col-12 col-md-2 col-form-label h2"><span class="input-group-addon"><i class="fas fa-street-view"></i></span></label>
+                                    <div class="col-12 col-md-10">
+                                        <input type="text" class="form-control" name="pueblo" id="pueblo" placeholder="pueblo" readonly="readonly">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-12 col-md-2 col-form-label h2"><span class="input-group-addon"><i class="fas fa-street-view"></i></span></label>
+                                    <div id="colonias" class="col-12 col-md-2 col-form-label h2">
+                                        </div>
+                                </div>
+
+                               
+                            </form>
+                        </section>
 
                         <div id="carrito" class="form-group table-responsive" >
                             <table class="form-group table" id="lista-compra" >
@@ -174,7 +177,42 @@
     </main>
 
 
-
+    <script>
+        function myFunction(codePostal){
+            fetch('https://blackisp.herokuapp.com/postalCodes/'+codePostal).then(
+                response => response.json()
+            ).then(
+                json => myFunction2(json)
+                )
+        }
+        function myFunction2(params) {
+            var estado = params.state;
+            document.getElementById("estado").value=estado;
+            var ciudad = params.city;
+            document.getElementById("ciudad").value=ciudad;
+            var pueblo = params.town;
+            document.getElementById("pueblo").value=pueblo;
+            if(params.colonies.length == 1){
+                document.getElementById("colonias").innerHTML='<label for="coloniaIn">Colonia: </label><input type="text" name="colonia" id="coloniaIn" placeholder="colonia" readonly="readonly">';
+                var colonia = params.colonies;
+                document.getElementById("coloniaIn").value=colonia;
+            }else if(params.colonies.length > 1){
+                var array = params.colonies;
+                document.getElementById("colonias").innerHTML='<label for="coloniaSe"> </label><select name="colonia" class="form-control1" id="coloniaSe"><option>selecciona una colonia</option></select>';
+                // Ordena el Array Alfabeticamente, es muy facil ;)):
+                array.sort();
+                addOptions("coloniaSe", array);
+            }
+        }
+        function addOptions(domElement, array) {
+        var select = document.getElementById(domElement);
+            for (value in array) {
+            var option = document.createElement("option");
+            option.innerHTML = array[value];
+            select.appendChild(option);
+            }
+        }
+    </script>
 
 
     </div>
