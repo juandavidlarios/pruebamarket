@@ -105,11 +105,12 @@
                                     <div id="colonias" class="col-12 col-md-2 col-form-label h2">
                                         </div>
                                 </div>
-
-                               
                             </form>
                         </section>
 
+                       
+
+                        
                         <div id="carrito" class="form-group table-responsive" >
                             <table class="form-group table" id="lista-compra" >
                                 <thead>
@@ -160,63 +161,44 @@
                                 <a href="index.html" class="btn btn-info btn-block">Seguir comprando</a>
                             </div>
                             <div class="col-xs-12 col-md-4">
-                                <input type="submit" class="btn btn-success btn-block" id="procesar-compra" value="Realizar compra">
+                                <input type="submit" class="btn btn-success btn-block" id="procesar-compra" value="Guardar cambios">
                             </div>
-
-                            
                         </div>
                     </form>
 
-
+                    
                 </div>
-
-
-            </div>
-
+             </div>
         </div>
     </main>
-
-
-    <script>
-        function myFunction(codePostal){
-            fetch('https://blackisp.herokuapp.com/postalCodes/'+codePostal).then(
-                response => response.json()
-            ).then(
-                json => myFunction2(json)
-                )
-        }
-        function myFunction2(params) {
-            var estado = params.state;
-            document.getElementById("estado").value=estado;
-            var ciudad = params.city;
-            document.getElementById("ciudad").value=ciudad;
-            var pueblo = params.town;
-            document.getElementById("pueblo").value=pueblo;
-            if(params.colonies.length == 1){
-                document.getElementById("colonias").innerHTML='<label for="coloniaIn">Colonia: </label><input type="text" name="colonia" id="coloniaIn" placeholder="colonia" readonly="readonly">';
-                var colonia = params.colonies;
-                document.getElementById("coloniaIn").value=colonia;
-            }else if(params.colonies.length > 1){
-                var array = params.colonies;
-                document.getElementById("colonias").innerHTML='<label for="coloniaSe"> </label><select name="colonia" class="form-control1" id="coloniaSe"><option>selecciona una colonia</option></select>';
-                // Ordena el Array Alfabeticamente, es muy facil ;)):
-                array.sort();
-                addOptions("coloniaSe", array);
-            }
-        }
-        function addOptions(domElement, array) {
-        var select = document.getElementById(domElement);
-            for (value in array) {
-            var option = document.createElement("option");
-            option.innerHTML = array[value];
-            select.appendChild(option);
-            }
-        }
-    </script>
-
-
     </div>
 
+    <section>
+        <div class="contenedor">
+            <article>
+            <center>
+                <button id="btn-abrir-popup" class="btn-abrir-popup">Finalizar compra</button>
+            </center>
+            </article>
+        
+            <div class="overlay" id="overlay">
+              <div class="popup" id="popup">
+                <a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
+                <img src="img/alert.jpg" alt="" class="size-metodo">
+                <h3>IMPORTANTE!</h3>
+                
+                <form action="">
+                  <div class="contenedor-inputs">
+                    <p>Debido a la situación de orden publico del país, nuestras entregas están presentando retrasos</p>
+                    <br>
+                    <strong>¡Gracias por tu comprención!</strong>
+                  </div>
+                  <input type="submit" class="btn-submit" value="Aceptar">
+                </form>
+              </div>
+            </div>
+          </div>
+    </section>
     <script src="js/jquery-3.4.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/sweetalert2.min.js"></script>
